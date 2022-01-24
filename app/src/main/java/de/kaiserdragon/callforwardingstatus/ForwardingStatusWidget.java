@@ -1,14 +1,24 @@
 package de.kaiserdragon.callforwardingstatus;
 
 
+import static android.content.Context.TELEPHONY_SERVICE;
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
+import android.Manifest;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 
 /**
@@ -16,7 +26,8 @@ import android.widget.RemoteViews;
  */
 public class ForwardingStatusWidget extends AppWidgetProvider {
     boolean cfi;
-
+    private  PhoneStateReceiver phoneStateReceiver  = null;
+    String TAG = "hjkfgskahjsdgj";
 
     void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                          int appWidgetId) {
@@ -24,13 +35,14 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
         CharSequence widgetText;
 
         if (!cfi) {
-            widgetText = context.getString(R.string.appwidget_text2);
+            widgetText = context.getString(R.string.appwidget_text3);
         } else widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         Log.i(TAG, "onCallForwardingIndicatorChanged  CFI =" + widgetText);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
+        //views.setTextViewTextSize(appWidgetId, COMPLEX_UNIT_SP, 14);
         views.setTextViewText(R.id.appwidget_text, widgetText);
-        views.setTextViewTextSize(appWidgetId, COMPLEX_UNIT_SP, 100);
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
 
     }
@@ -43,7 +55,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -53,9 +64,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-
-        // Enter relevant functionality for when the first widget is created
-
 
     }
 

@@ -3,6 +3,8 @@
     package="de.kaiserdragon.callforwardingstatus">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CallForwardingStatus">
         <receiver
-            android:name="de.kaiserdragon.callforwardingstatus.ForwardingStatusWidget"
+            android:name=".PhoneStateReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.telephony.action.SECRET_CODE"/>
+                <action android:name="Telephony.Sms.Intents.SECRET_CODE_ACTION"/>
+
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".CheckService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".ForwardingStatusWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -23,7 +42,7 @@
         </receiver>
 
         <activity
-            android:name="de.kaiserdragon.callforwardingstatus.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
