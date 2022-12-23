@@ -20,13 +20,15 @@ import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
     Context context;
-    String TAG = "badsfufjk";
+    String TAG = "Main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+
+
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -36,21 +38,20 @@ public class MainActivity extends AppCompatActivity {
                         1);
                 return;
             }
-      /*else {
-                TelephonyManager manager = (TelephonyManager)
-                        this.getSystemService(TELEPHONY_SERVICE);
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                    manager.listen(new MainActivity.MyPhoneStateListener(),
-                            PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR);
-                }
-            }*/
-
-
         }
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+               //Intent serviceIntent = new Intent(context, MyPhoneStateService.class);
+                //context.startForegroundService(serviceIntent);
+                //startService(serviceIntent);
+                //Start the MyPhoneStateService
+               //context.startService(serviceIntent);
+
+
                 TelephonyManager manager = (TelephonyManager)
                         context.getSystemService(TELEPHONY_SERVICE);
                 Log.i(TAG, "onCallForwarding");
@@ -60,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onReceiveUssdResponse(TelephonyManager telephonyManager, String request, CharSequence response) {
                         super.onReceiveUssdResponse(telephonyManager, request, response);
                         Log.i(TAG, "ok");
-                        Intent sendintent = new Intent(context,CheckService.class);
-                        context.startService(sendintent);//
+                        //Intent sendintent = new Intent(context,CheckService.class);
+                        //context.startService(sendintent);//
                         Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    if MyPhoneStateListener
+                    //if MyPhoneStateListener)
                     manager.sendUssdRequest("**21*3311#", responseCallback, handler);
                 }
 
@@ -82,27 +83,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    class MyPhoneStateListener extends PhoneStateListener {
 
-        @Override
-        public void onCallForwardingIndicatorChanged(boolean cfi) {
-            Log.i(TAG, "onCallForwardingIndicatorChanged  CFI =" + cfi);
-
-            Intent intent = new Intent(context, ForwardingStatusWidget.class);
-            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-            int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ForwardingStatusWidget.class));
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-            intent.putExtra("cfi", cfi);
-            sendBroadcast(intent);
-
-
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                    super.onCallForwardingIndicatorChanged(cfi);
-                }
-            }
-        }
-
-    }
 
 }
