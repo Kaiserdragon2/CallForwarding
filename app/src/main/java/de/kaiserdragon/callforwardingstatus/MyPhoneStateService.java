@@ -11,21 +11,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 
 public class MyPhoneStateService extends Service {
+    private static final String CHANNEL_ID = "my_phone_state_service_channel";
+    public static boolean currentState;
     Context context;
     String TAG = "Service";
     private MyPhoneStateListener phoneStateListener;
-    private static final String CHANNEL_ID = "my_phone_state_service_channel";
-    private static boolean currentState;
 
     @Override
     public void onCreate() {
@@ -74,13 +74,14 @@ public class MyPhoneStateService extends Service {
         // Return null as this service is not bound to any activity
         return null;
     }
+
     class MyPhoneStateListener extends PhoneStateListener {
 
         @Override
         public void onCallForwardingIndicatorChanged(boolean cfi) {
             Log.i(TAG, "onCallForwardingIndicatorChanged  CFI =" + cfi);
             // Get the current state of unconditional call forwarding
-            currentState =cfi;
+            currentState = cfi;
             // Create an Intent with the android.appwidget.action.APPWIDGET_UPDATE action
             Intent intent = new Intent(context, ForwardingStatusWidget.class);
             intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");

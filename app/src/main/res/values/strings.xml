@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">CallForwardingStatus</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="app_widget_description">Show call forwarding status</string>
+    <string name="ToggleCallForwarding">Toggle call forwarding</string>
+    <string name="DescriptionMain">Enter a phone number which you would like to forward your calls to.
+    It is possible to store up to three numbers to quickly switch between them.</string>
+    <string name="Phone_number1">Phone number 1</string>
+    <string name="Phone_number2">Phone number 2</string>
+    <string name="Phone_number3">Phone number 3</string>
+    <string name="save_row_1">Save row 1</string>
+    <string name="save_row_2">Save row 2</string>
+    <string name="save_row_3">Save row 3</string>
+    <string name="delete_row_1">Delete row 1</string>
+    <string name="delete_row_2">Delete row 2</string>
+    <string name="delete_row_3">Delete row 3</string>
+    <string name="Radio_row_1">Row 1</string>
+    <string name="Radio_row_2">Row 2</string>
+    <string name="Radio_row_3">Row 3</string>
+
 </resources>

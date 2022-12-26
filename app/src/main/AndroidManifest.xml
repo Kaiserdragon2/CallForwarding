@@ -17,6 +17,8 @@
             android:name=".MyPhoneStateService"
             android:stopWithTask="false" />
 
+
+
         <receiver
             android:name=".ForwardingStatusWidget"
             android:exported="true">
@@ -27,6 +29,14 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/forwarding_status_widget_info" />
+        </receiver>
+
+        <receiver android:name=".CallForwardingReceiver"
+            android:exported="true"
+            android:enabled= "true">
+            <intent-filter>
+                <action android:name="de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING" />
+            </intent-filter>
         </receiver>
 
         <activity

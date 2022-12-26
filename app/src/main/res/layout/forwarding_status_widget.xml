@@ -5,40 +5,33 @@
     style="@style/Widget.CallForwardingStatus.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/widget_background_round"
+    android:backgroundTint="@color/black"
     android:clickable="true"
     android:clipChildren="true"
     android:gravity="center"
     android:theme="@style/Theme.CallForwardingStatus.AppWidgetContainer">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/app_widget_background"
-        android:backgroundTint="@color/black"
-        android:contentDescription="bla"
-        android:cropToPadding="false"
-        android:foreground="@drawable/ic_callforwarding"
-        android:foregroundGravity="center_vertical"
-        android:foregroundTint="#FF0000"
-        android:scaleType="fitCenter"
-        android:visibility="visible"
-        tools:visibility="visible" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_alignBottom="@+id/imageView2"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:layout_toEndOf="@+id/imageView"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/imageView2"
         android:foregroundGravity="center_vertical"
         android:gravity="center"
         android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_callforwarding" />
 
 </RelativeLayout>

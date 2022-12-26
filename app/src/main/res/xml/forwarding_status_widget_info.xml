@@ -5,7 +5,7 @@
     android:initialLayout="@layout/forwarding_status_widget"
     android:maxResizeWidth="300dp"
     android:maxResizeHeight="40dp"
-    android:minWidth="300dp"
+    android:minWidth="60dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/ic_callforwarding"
     android:previewLayout="@layout/forwarding_status_widget"

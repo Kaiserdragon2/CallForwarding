@@ -7,20 +7,187 @@
     tools:context="de.kaiserdragon.callforwardingstatus.MainActivity">
 
     <TextView
+        android:id="@+id/MainText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:text="@string/DescriptionMain"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintHorizontal_bias="0.535"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainText">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:contentDescription="@string/Radio_row_1" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/Radio_row_2" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/Radio_row_3" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/PhoneNumber1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="@string/Phone_number1"
+                    android:importantForAutofill="no"
+                    android:inputType="phone" />
+
+                <ImageButton
+                    android:id="@+id/save_row1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/save_row_1"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_save" />
+
+                <ImageButton
+                    android:id="@+id/delete_row1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/delete_row_1"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/PhoneNumber2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="@string/Phone_number2"
+                    android:importantForAutofill="no"
+                    android:inputType="phone" />
+
+                <ImageButton
+                    android:id="@+id/save_row2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/save_row_2"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_save" />
+
+                <ImageButton
+                    android:id="@+id/delete_row2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/delete_row_2"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/PhoneNumber3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="@string/Phone_number3"
+                    android:importantForAutofill="no"
+                    android:inputType="phone" />
+
+                <ImageButton
+                    android:id="@+id/save_row3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/save_row_3"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_save" />
+
+                <ImageButton
+                    android:id="@+id/delete_row3"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/design_default_color_primary_variant"
+                    android:contentDescription="@string/delete_row_3"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="155dp" />
+        android:text="@string/ToggleCallForwarding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
