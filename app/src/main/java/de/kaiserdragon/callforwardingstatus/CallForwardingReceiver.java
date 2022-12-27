@@ -19,22 +19,23 @@ import androidx.core.app.ActivityCompat;
 
 public class CallForwardingReceiver extends BroadcastReceiver {
     String TAG = "Receiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         // Get the current CFI value from the intent
         if ("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING".equals(intent.getAction())) {
 
             // Toggle the CFI value
-
-
+            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+            String[] array =databaseHelper.getSelected();
             // Set the new CFI value
-            setCallForwarding(context, MyPhoneStateService.currentState);
+            setCallForwarding(context, MyPhoneStateService.currentState,array[1]);
             // Update the widget to reflect the new CFI value
             //ForwardingStatusWidget.updateWidget(context, cfi);
         }
     }
 
-    private void setCallForwarding(Context context, boolean cfi) {
+    private void setCallForwarding(Context context, boolean cfi,String phoneNumber) {
         // TODO: Implement code to set the call forwarding status here
         Log.i(TAG, String.valueOf(cfi));
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
@@ -43,9 +44,6 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             @Override
             public void onReceiveUssdResponse(TelephonyManager telephonyManager, String request, CharSequence response) {
                 super.onReceiveUssdResponse(telephonyManager, request, response);
-
-                //Intent sendintent = new Intent(context,CheckService.class);
-                //context.startService(sendintent);//
                 Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             }
 
@@ -61,7 +59,11 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if (cfi == false) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 //if MyPhoneStateListener)
-                manager.sendUssdRequest("*21*3311#", responseCallback, handler);
+                StringBuilder ussdString = new StringBuilder("*21*");
+                ussdString.append(phoneNumber);
+                ussdString.append("#");
+                String ussdRequest = ussdString.toString();
+                manager.sendUssdRequest(ussdRequest, responseCallback, handler);
             }
         } else {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {

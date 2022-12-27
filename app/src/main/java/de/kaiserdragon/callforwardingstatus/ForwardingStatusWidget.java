@@ -59,7 +59,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
     public static void  updateWidget(Context context, boolean cfi) {
         // Update the widget's views with the current CFI value
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
-        views.setTextViewText(R.id.textView, cfi ? "Call forwarding is enabled" : "Call forwarding is disabled");
+        views.setTextViewText(R.id.textView, cfi ? context.getString(R.string.CallForwardingActive) : context.getString(R.string.CallForwardingInactive));
         if (cfi) views.setInt(R.id.imageView2, "setColorFilter", Color.GREEN);
         else views.setInt(R.id.imageView2, "setColorFilter", Color.RED);
         // Create an Intent to activate or deactivate call forwarding

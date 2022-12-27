@@ -13,8 +13,12 @@
     <string name="delete_row_1">Delete row 1</string>
     <string name="delete_row_2">Delete row 2</string>
     <string name="delete_row_3">Delete row 3</string>
-    <string name="Radio_row_1">Row 1</string>
-    <string name="Radio_row_2">Row 2</string>
-    <string name="Radio_row_3">Row 3</string>
+    <string name="Radio_row_1">1</string>
+    <string name="Radio_row_2">2</string>
+    <string name="Radio_row_3">3</string>
+    <string name="CallForwardingActive">Call Forwarding Active</string>
+    <string name="CallForwardingInactive">Call Forwarding Inactive</string>
+    <string name="PhoneNumberSaved">Phone number saved</string>
+    <string name="PhoneNumberDeleted">Phone number deleted</string>
 
 </resources>
