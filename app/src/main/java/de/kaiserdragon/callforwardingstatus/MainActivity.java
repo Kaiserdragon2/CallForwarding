@@ -4,16 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -43,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         activity = this;
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+        }
         checkPermission(this);
         // Find the EditText views and ImageButton views
         final EditText phoneNumber1EditText = findViewById(R.id.PhoneNumber1);
@@ -71,30 +72,24 @@ public class MainActivity extends AppCompatActivity {
         deleteButton3.setOnClickListener(v -> deleteSQLData(phoneNumber3EditText,3));
 
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING");
-                intent.setClass(context, CallForwardingReceiver.class);
-                intent.putExtra("cfi", MyPhoneStateService.currentState);
-                context.sendBroadcast(intent);
-            }
+        findViewById(R.id.button).setOnClickListener(view -> {
+            Intent intent = new Intent("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING");
+            intent.setClass(context, CallForwardingReceiver.class);
+            intent.putExtra("cfi", MyPhoneStateService.currentState);
+            context.sendBroadcast(intent);
         });
 
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //group.clearCheck(); // Clear the previously selected radio button
-                RadioButton selectedRadioButton = findViewById(checkedId);
-                String selectedId = selectedRadioButton.getContentDescription().toString();
-                selectedRadioButton.setChecked(true); // Set the current radio button as checked
-                databaseHelper.changeSelected(selectedId);
-                String number = getPhoneNumber(Integer.parseInt(selectedId));
-                // Save the selected option to a variable here
-               // saveSQLData(number,selectedId)
-            }
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            //group.clearCheck(); // Clear the previously selected radio button
+            RadioButton selectedRadioButton = findViewById(checkedId);
+            String selectedId = selectedRadioButton.getContentDescription().toString();
+            selectedRadioButton.setChecked(true); // Set the current radio button as checked
+            databaseHelper.changeSelected(selectedId);
+            //String number = getPhoneNumber(Integer.parseInt(selectedId));
+            // Save the selected option to a variable here
+           // saveSQLData(number,selectedId)
         });
 
     }
@@ -167,19 +162,11 @@ public class MainActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this)
                         .setTitle("Permission needed")
                         .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Request the permission again
-                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
-                            }
+                        .setPositiveButton("Ok", (dialog, which) -> {
+                            // Request the permission again
+                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .create()
                         .show();
             } else {
@@ -202,28 +189,22 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted, you can do the required task
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, 2);
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+                }
             } else {
                 // Permission was denied, you can show a message to the user
                 new AlertDialog.Builder(this)
                         .setTitle("Permission needed")
                         .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Redirect the user to the app's settings page
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                                startActivity(intent);
-                            }
+                        .setPositiveButton("Ok", (dialog, which) -> {
+                            // Redirect the user to the app's settings page
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .create()
                         .show();
             }

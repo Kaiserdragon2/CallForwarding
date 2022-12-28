@@ -13,7 +13,7 @@
     android:theme="@style/Theme.CallForwardingStatus.AppWidgetContainer">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/StatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView2"
@@ -24,7 +24,8 @@
         android:layout_toEndOf="@+id/imageView2"
         android:foregroundGravity="center_vertical"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="@string/CallForwardingActive"
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/imageView2"

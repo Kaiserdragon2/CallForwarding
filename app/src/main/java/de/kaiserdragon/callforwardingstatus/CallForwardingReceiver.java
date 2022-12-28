@@ -76,7 +76,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
     private void updateWidget(Context context, boolean cfi) {
         // Update the widget's views with the current CFI value
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
-        views.setTextViewText(R.id.textView, cfi ? "Call forwarding is enabled" : "Call forwarding is disabled");
+        views.setTextViewText(R.id.StatusText, cfi ? "Call forwarding is enabled" : "Call forwarding is disabled");
         // Update the widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, ForwardingStatusWidget.class));
