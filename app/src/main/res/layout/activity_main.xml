@@ -87,7 +87,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/save_row_1"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_save" />
+                    app:srcCompat="@drawable/save" />
 
                 <ImageButton
                     android:id="@+id/delete_row1"
@@ -98,7 +98,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/delete_row_1"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_delete" />
+                    app:srcCompat="@drawable/delete" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +124,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/save_row_2"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_save" />
+                    app:srcCompat="@drawable/save" />
 
                 <ImageButton
                     android:id="@+id/delete_row2"
@@ -135,7 +135,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/delete_row_2"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_delete" />
+                    app:srcCompat="@drawable/delete" />
             </LinearLayout>
 
             <LinearLayout
@@ -161,7 +161,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/save_row_3"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_save" />
+                    app:srcCompat="@drawable/save" />
 
                 <ImageButton
                     android:id="@+id/delete_row3"
@@ -172,7 +172,7 @@
                     android:background="?attr/colorPrimary"
                     android:contentDescription="@string/delete_row_3"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_delete" />
+                    app:srcCompat="@drawable/delete" />
             </LinearLayout>
 
         </LinearLayout>

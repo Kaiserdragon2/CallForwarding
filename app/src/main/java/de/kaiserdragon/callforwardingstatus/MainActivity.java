@@ -42,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         activity = this;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
-        }
         checkPermission(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+         //   ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+        }
+
         // Find the EditText views and ImageButton views
         final EditText phoneNumber1EditText = findViewById(R.id.PhoneNumber1);
         final EditText phoneNumber2EditText = findViewById(R.id.PhoneNumber2);
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkPermission(Activity activity) {
         // Check Permission
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
                 // Show a dialog explaining the need for the permission
                 new AlertDialog.Builder(this)
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
                 return;
             }
+           // return;
         }
         //Permission already granted start service
         Intent serviceIntent = new Intent(context, MyPhoneStateService.class);
