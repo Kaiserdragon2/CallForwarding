@@ -1,0 +1,9 @@
+With this app you can forward your calls on a simple push of a button.
+Be it in the app or from an widget.
+
+#### Features:
+
+- save up to three phone numbers
+- simply switch between those 
+- Resizable widget displays current call forwarding status
+
