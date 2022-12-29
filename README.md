@@ -12,6 +12,6 @@ Be it in the app or from an widget.
 - Resizable widget displays current call forwarding status
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Main.png" height="500"> <img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Widget_long.png" height="500"> <img src="https://raw.githubusercontent.com/Kaiserdragon2/C/main/docs/Screenshot_Widget_long_green.png" height="500">
+<img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Main.png" height="500"> <img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Widget_long.png" height="500"> <img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Widget_long_green.png" height="500">
 
 <img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Widget_short.png" height="500"> <img src="https://raw.githubusercontent.com/Kaiserdragon2/CallForwarding/main/docs/Screenshot_Widget_big.png" height="500"> 
