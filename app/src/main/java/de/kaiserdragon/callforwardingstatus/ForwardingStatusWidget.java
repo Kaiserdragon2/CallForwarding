@@ -4,6 +4,8 @@ package de.kaiserdragon.callforwardingstatus;
 import static android.content.Context.MODE_PRIVATE;
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
+import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
+
 import android.Manifest;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -26,21 +28,20 @@ import androidx.core.app.ActivityCompat;
  * Implementation of App Widget functionality.
  */
 public class ForwardingStatusWidget extends AppWidgetProvider {
-    //private static final int REQUEST_CODE_FOREGROUND_SERVICE_PERMISSION = 100;
     private static boolean currentState;
-    String TAG = "Widget";
+    final String TAG = "Widget";
 
 
     public void save(Context context) {
         // Get a SharedPreferences object
-        SharedPreferences sharedPreferences = context.getSharedPreferences("my_preferences", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AppState", MODE_PRIVATE);
         // Save the CFI value
         sharedPreferences.edit().putBoolean("cfi", currentState).apply();
     }
 
     public void load(Context context) {
         // Get an instance of SharedPreferences
-        SharedPreferences sharedPreferences = context.getSharedPreferences("your_prefs_name", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AppState", Context.MODE_PRIVATE);
 
         // Load the CFI value from shared preferences
         currentState = sharedPreferences.getBoolean("cfi", false); // The second parameter is the default value to use if the CFI value is not found in shared preferences
@@ -53,19 +54,15 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
         int minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-        int HW = (minWidth / minHeight);
-        Log.i(TAG, "Ahhh=" + HW);
-        if (HW <= 2) {
+        if (DEBUG) Log.v(TAG,"width"+minWidth);
+        if ((minWidth / minHeight) <= 2) {
             views.setViewVisibility(R.id.StatusText, View.GONE);
-            Log.i(TAG, "Width=False");
         } else if (minWidth < 180) {
             views.setViewVisibility(R.id.StatusText, View.GONE);
-            Log.i(TAG, "Width=True");
         } else {
             views.setViewVisibility(R.id.StatusText, View.VISIBLE);
-            Log.i(TAG, "Width=False");
         }
-        if (minHeight > 90)views.setTextViewTextSize(R.id.StatusText,COMPLEX_UNIT_SP,28);
+        if (minHeight > 90)views.setTextViewTextSize(R.id.StatusText,COMPLEX_UNIT_SP,26);
         else views.setTextViewTextSize(R.id.StatusText,COMPLEX_UNIT_SP,16);
         appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views);
     }
@@ -74,7 +71,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if ("android.appwidget.action.APPWIDGET_UPDATE".equals(intent.getAction())) {
-            Log.i(TAG, "Waahhh");
             // Get the current CFI value from the Intent extra
             currentState = intent.getBooleanExtra("cfi", currentState);
             //currentState = cfi;
@@ -115,7 +111,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
             context.startActivity(intent);
             return;
         }
-        Intent serviceIntent = new Intent(context, MyPhoneStateService.class);
+        Intent serviceIntent = new Intent(context, PhoneStateService.class);
         context.startForegroundService(serviceIntent);
         load(context);
         //updateWidget(context, currentState);

@@ -1,6 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_button"
     style="@style/Widget.CallForwardingStatus.AppWidget.Container"
     android:layout_width="match_parent"
@@ -18,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView2"
         android:layout_alignBottom="@+id/imageView2"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@+id/imageView2"
         android:foregroundGravity="center_vertical"
@@ -32,7 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/ToggleCallForwarding"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_callforwarding" />
+        android:src="@drawable/ic_call_forwarding" />
 
 </RelativeLayout>

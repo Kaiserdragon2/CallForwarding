@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_READ_PHONE_STATE_PERMISSION = 1;
 
 
-    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    final DatabaseHelper databaseHelper = new DatabaseHelper(this);
     //SQLiteDatabase database = databaseHelper.getWritableDatabase();
     Context context;
     Activity activity;
-    String TAG = "Main";
+    final String TAG = "Main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         checkPermission(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-         //   ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+           ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
         }
 
         // Find the EditText views and ImageButton views
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(view -> {
             Intent intent = new Intent("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING");
             intent.setClass(context, CallForwardingReceiver.class);
-            intent.putExtra("cfi", MyPhoneStateService.currentState);
+            intent.putExtra("cfi", PhoneStateService.currentState);
             context.sendBroadcast(intent);
         });
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
            // return;
         }
         //Permission already granted start service
-        Intent serviceIntent = new Intent(context, MyPhoneStateService.class);
+        Intent serviceIntent = new Intent(context, PhoneStateService.class);
         context.startForegroundService(serviceIntent);
     }
 

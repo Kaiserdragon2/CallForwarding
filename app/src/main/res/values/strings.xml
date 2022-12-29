@@ -19,6 +19,8 @@
     <string name="CallForwardingActive">Call Forwarding Active</string>
     <string name="CallForwardingInactive">Call Forwarding Inactive</string>
     <string name="PhoneNumberSaved">Phone number saved</string>
-    <string name="PhoneNumberDeleted">Phone number deleted</string>
+    <string name="NoNumber">No phone number has been set</string>
+    <string name="NotificationTitle">Call Forwarding service</string>
+    <string name="NotificationText">Service Running</string>
 
 </resources>

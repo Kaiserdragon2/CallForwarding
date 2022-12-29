@@ -1,8 +1,0 @@
-<resources>
-
-    <style name="Widget.CallForwardingStatus.AppWidget.Container" parent="android:Widget">
-        <item name="android:id">@android:id/background</item>
-        <item name="android:background">?android:attr/colorBackground</item>
-    </style>
-
-</resources>

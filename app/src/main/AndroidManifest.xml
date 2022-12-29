@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:allowBackup="true"
@@ -13,10 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CallForwardingStatus">
 
-        <service
-            android:name=".MyPhoneStateService"
-            android:stopWithTask="false" />
 
+        <service
+            android:name=".PhoneStateService"
+            android:stopWithTask="false" />
 
 
         <receiver
@@ -31,10 +34,12 @@
                 android:resource="@xml/forwarding_status_widget_info" />
         </receiver>
 
-        <receiver android:name=".CallForwardingReceiver"
-            android:exported="true"
-            android:enabled= "true">
+        <receiver
+            android:name=".CallForwardingReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING" />
             </intent-filter>
         </receiver>
