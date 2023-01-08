@@ -79,6 +79,16 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
             // Update the widget with the current CFI value
             updateWidget(context, currentState);
         }
+        if("android.appwidget.action.APPWIDGET_UPDATE_Color".equals(intent.getAction())) {
+            int color = intent.getIntExtra("color", 0);
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
+            views.setInt(R.id.widget_button, "setBackgroundColor", color);
+            // Update the widget
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, ForwardingStatusWidget.class));
+            appWidgetManager.updateAppWidget(appWidgetIds, views);
+        }
+
     }
 
     public static void updateWidget(Context context, boolean cfi) {

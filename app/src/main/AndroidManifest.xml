@@ -27,6 +27,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE_Color" />
             </intent-filter>
 
             <meta-data
@@ -43,7 +44,7 @@
                 <action android:name="de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING" />
             </intent-filter>
         </receiver>
-
+        <activity android:name=".SettingsActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

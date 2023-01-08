@@ -37,6 +37,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
 
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
         if (DEBUG)Log.i(TAG, String.valueOf(cfi));
+        if (DEBUG) Log.v(TAG,phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         Handler handler = new Handler();
         TelephonyManager.UssdResponseCallback responseCallback = new TelephonyManager.UssdResponseCallback() {
@@ -56,6 +57,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if (!cfi) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 String ussdRequest = "*21*" + phoneNumber + "#";
+                if (DEBUG) Log.v(TAG,ussdRequest);
                 manager.sendUssdRequest(ussdRequest, responseCallback, handler);
             }
         } else {

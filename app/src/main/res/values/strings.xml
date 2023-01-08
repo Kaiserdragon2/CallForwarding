@@ -22,5 +22,6 @@
     <string name="NoNumber">No phone number has been set</string>
     <string name="NotificationTitle">Call Forwarding service</string>
     <string name="NotificationText">Service Running</string>
+    <string name="settings">Settings</string>
 
 </resources>
