@@ -27,7 +27,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE_Color" />
+                <action android:name="de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI" />
+                <action android:name="de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_COLOR" />
             </intent-filter>
 
             <meta-data

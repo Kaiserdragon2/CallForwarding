@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background_round"
-    android:backgroundTint="@color/black"
     android:clickable="true"
     android:clipChildren="true"
     android:gravity="center"

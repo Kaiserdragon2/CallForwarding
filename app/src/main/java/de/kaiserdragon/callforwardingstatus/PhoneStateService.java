@@ -39,7 +39,7 @@ public class PhoneStateService extends Service {
             currentState = cfi;
             // Create an Intent with the android.appwidget.action.APPWIDGET_UPDATE action
             Intent intent = new Intent(context, ForwardingStatusWidget.class);
-            intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+            intent.setAction("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI");
 
 
 
