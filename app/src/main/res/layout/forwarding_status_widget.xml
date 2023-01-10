@@ -1,37 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_button"
     style="@style/Widget.CallForwardingStatus.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background_round"
-    android:backgroundTint="@color/black"
     android:clickable="true"
     android:clipChildren="true"
     android:gravity="center"
     android:theme="@style/Theme.CallForwardingStatus.AppWidgetContainer">
 
-    <TextView
-        android:id="@+id/StatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@+id/imageView2"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center"
-        android:text="@string/CallForwardingActive"
-        android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ImageCallForwarding"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@string/ToggleCallForwarding"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_call_forwarding" />
+
+    <TextView
+        android:id="@+id/StatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ImageCallForwarding"
+        android:layout_alignBottom="@+id/ImageCallForwarding"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/ImageCallForwarding"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center"
+        android:text="@string/CallForwardingActive"
+        android:textSize="16sp" />
 
 </RelativeLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ClolorChoserTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ChoseColor"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/color_preview"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="@string/callForwarding"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <Spinner
+        android:id="@+id/background_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:contentDescription="@string/ChoseColorSpinner" />
+
+
+    <TextView
+        android:id="@+id/Hue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hue"
+        android:textAlignment="center" />
+
+    <SeekBar
+        android:id="@+id/hue_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="360" />
+
+    <TextView
+        android:id="@+id/saturation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/saturation"
+        android:textAlignment="center" />
+
+    <SeekBar
+        android:id="@+id/saturation_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/value"
+        android:textAlignment="center" />
+
+    <SeekBar
+        android:id="@+id/value_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/alpha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/alpha"
+        android:textAlignment="center" />
+
+    <SeekBar
+        android:id="@+id/alpha_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255" />
+
+    <Button
+        android:id="@+id/applyColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:insetBottom="6dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/applyColor"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
