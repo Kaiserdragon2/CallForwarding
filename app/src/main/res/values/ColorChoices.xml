@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="background_colors">
+        <item>Transparent</item>
+        <item>Black</item>
+        <item>White</item>
+        <item>Blue</item>
+        <item>Yellow</item>
+        <item>Dark Grey</item>
+        <item>Dark Blue</item>
+        <item>Light Grey</item>
+    </string-array>
+</resources>
