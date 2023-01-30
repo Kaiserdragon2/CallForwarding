@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 
 
 public class PhoneStateService extends Service {
-    private static final String CHANNEL_ID = "my_phone_state_service_channel";
+    private static final String CHANNEL_ID = "CallForwardingServiceID";
     public static boolean currentState;
     Context context;
     final String TAG = "Service";

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CallForwardingStatus</string>
+    <string name="app_widget_description">Zeige den Status der Rufumleitung</string>
+    <string name="ToggleCallForwarding">Rufumleitung umschalten</string>
+    <string name="DescriptionMain">Füge eine Telefonnummer hinzu, zu welcher die Anrufe weitergeleitet werden sollen.
+        Es ist möglich bis zu drei Nummern zu speichern und schnell zwischen diesen zu wechseln.</string>
+    <string name="Phone_number1">Telefonnummer 1</string>
+    <string name="Phone_number2">Telefonnummer 2</string>
+    <string name="Phone_number3">Telefonnummer 3</string>
+    <string name="save_row_1">Speichern Reihe 1</string>
+    <string name="save_row_2">Speichern Reihe 2</string>
+    <string name="save_row_3">Speichern Reihe 3</string>
+    <string name="delete_row_1">Löschen Reihe 1</string>
+    <string name="delete_row_2">Löschen Reihe 2</string>
+    <string name="delete_row_3">Löschen Reihe 3</string>
+    <string name="Radio_row_1">1</string>
+    <string name="Radio_row_2">2</string>
+    <string name="Radio_row_3">3</string>
+    <string name="CallForwardingActive">Rufumleitung Aktiv</string>
+    <string name="CallForwardingInactive">Rufumleitung Inaktiv</string>
+    <string name="PhoneNumberSaved">Telefonnummer gespeichert</string>
+    <string name="NoNumber">Keine Telefonnummer ausgewählt</string>
+    <string name="NotificationTitle">Rufumleitungservice</string>
+    <string name="setupCallForwarding">Bitte warten umschalten der Rufumleitung in Arbeit</string>
+    <string name="NotificationText">Service läuft</string>
+    <string name="settings">Einstellungen</string>
+    <string name="ChoseColor">Wähle einen Hintergrund für das Widget</string>
+    <string name="ChoseColorSpinner">Wähle einen Hintergrund für das Widget Spinner</string>
+    <string name="hue">Farbton</string>
+    <string name="saturation">Sättigung</string>
+    <string name="value">Farbwert</string>
+    <string name="alpha">Transparenz</string>
+    <string name="callForwarding">Rufumleitung</string>
+    <string name="applyColor">Farbe anwenden</string>
+</resources>
