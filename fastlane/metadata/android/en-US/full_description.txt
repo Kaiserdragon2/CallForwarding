@@ -1,5 +1,5 @@
 With this app you can forward your calls on a simple push of a button.
-Be it in the app or from an widget.
+Be it in the app or from a widget.
 
 #### Features:
 
