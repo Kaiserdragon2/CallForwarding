@@ -26,6 +26,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             String[] array = databaseHelper.getSelected();
             if (DEBUG) Log.v(TAG,"Number = "+array[1]);
             if (!array[1].equals("")) {
+                Toast.makeText(context,context.getString(R.string.setupCallForwarding) , Toast.LENGTH_LONG).show();
                 setCallForwarding(context, PhoneStateService.currentState, array[1]);
             }else  Toast.makeText(context,context.getString(R.string.NoNumber) , Toast.LENGTH_SHORT).show();
         }

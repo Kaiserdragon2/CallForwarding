@@ -21,6 +21,7 @@
     <string name="PhoneNumberSaved">Phone number saved</string>
     <string name="NoNumber">No phone number has been set</string>
     <string name="NotificationTitle">Call Forwarding service</string>
+    <string name="setupCallForwarding">Please wait toggle call forwarding in progress</string>
     <string name="NotificationText">Service Running</string>
     <string name="settings">Settings</string>
     <string name="ChoseColor">Chose a Background Color for your Widget</string>
