@@ -26,6 +26,7 @@
     <string name="NotificationText">Service läuft</string>
     <string name="settings">Einstellungen</string>
     <string name="ChoseColor">Wähle einen Hintergrund für das Widget</string>
+    <string name="ChoseTextColor">Wähle eine Textfarbe für das Widget</string>
     <string name="ChoseColorSpinner">Wähle einen Hintergrund für das Widget Spinner</string>
     <string name="hue">Farbton</string>
     <string name="saturation">Sättigung</string>

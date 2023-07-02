@@ -5,9 +5,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/ClolorChoserTitle"
+        android:id="@+id/ColorChoserTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="@string/ChoseColor"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -22,12 +24,34 @@
         android:textAlignment="center"
         android:textSize="24sp" />
 
+
+    <TextView
+        android:id="@+id/colorChoserBackgroundText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/ChoseColor"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <Spinner
         android:id="@+id/background_spinner"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:contentDescription="@string/ChoseColorSpinner" />
 
+    <TextView
+        android:id="@+id/colorChoserTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/ChoseTextColor"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/Hue"
@@ -66,7 +90,8 @@
         android:id="@+id/value_seek_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100" />
+        android:max="100"
+        android:progress="100" />
 
     <TextView
         android:id="@+id/alpha"
@@ -85,6 +110,8 @@
         android:id="@+id/applyColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:insetLeft="5dp"
+        android:insetRight="5dp"
         android:insetBottom="6dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
