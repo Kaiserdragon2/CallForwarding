@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.Objects;
 
@@ -76,6 +81,55 @@ public class MainActivity extends AppCompatActivity {
         deleteButton1.setOnClickListener(v -> deleteSQLData(phoneNumber1EditText,1));
         deleteButton2.setOnClickListener(v -> deleteSQLData(phoneNumber2EditText,2));
         deleteButton3.setOnClickListener(v -> deleteSQLData(phoneNumber3EditText,3));
+        phoneNumber1EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                colorTextSaveStatus(phoneNumber1EditText);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //saveSQLData(phoneNumber1EditText,1);
+            }
+        });
+        phoneNumber2EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                colorTextSaveStatus(phoneNumber2EditText);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //saveSQLData(phoneNumber2EditText,2);
+            }
+        });
+        phoneNumber3EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                colorTextSaveStatus(phoneNumber3EditText);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //saveSQLData(phoneNumber3EditText,3);
+            }
+        });
+
 
 
         findViewById(R.id.button).setOnClickListener(view -> {
@@ -84,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("cfi", PhoneStateService.currentState);
             context.sendBroadcast(intent);
         });
+
 
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
@@ -122,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void colorTextSaveStatus(EditText numberInput){
+        numberInput.setTextColor(Color.RED);
     }
 
     private void setCheckedRadioButton(){
@@ -173,7 +231,13 @@ public class MainActivity extends AppCompatActivity {
             values.put(databaseHelper.getColumnSelected(),"false");
             insOk = database.insert(databaseHelper.getTableName(), null, values);
         }
-        if (insOk == 0 && ok == 1)Toast.makeText(context, getString(R.string.PhoneNumberSaved), Toast.LENGTH_SHORT).show();
+        if (insOk == 0 && ok == 1){
+            Toast.makeText(context, getString(R.string.PhoneNumberSaved), Toast.LENGTH_SHORT).show();
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+            int color = ContextCompat.getColor(this, typedValue.resourceId);
+            numberInput.setTextColor(color);
+        }
     }
 
     private void deleteSQLData(EditText numberInput, int row){
@@ -191,8 +255,8 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
                 // Show a dialog explaining the need for the permission
                 new AlertDialog.Builder(this)
-                        .setTitle("Permission needed")
-                        .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
+                        .setTitle("Read Phone State Permission needed")
+                        .setMessage("This permission is needed to read the phone state and update the widget accordingly. Without it the app can't function.")
                         .setPositiveButton("Ok", (dialog, which) -> {
                             // Request the permission again
                             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
@@ -208,9 +272,11 @@ public class MainActivity extends AppCompatActivity {
             }
            // return;
         }
-        //Permission already granted start service
-        Intent serviceIntent = new Intent(context, PhoneStateService.class);
-        context.startForegroundService(serviceIntent);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            //Permission already granted start service
+            Intent serviceIntent = new Intent(context, PhoneStateService.class);
+            context.startForegroundService(serviceIntent);
+        }
     }
 
     @Override
@@ -225,6 +291,35 @@ public class MainActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
                 }
             } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
+                    // Show a dialog explaining the need for the permission
+                    new AlertDialog.Builder(this)
+                            .setTitle("Permission needed")
+                            .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
+                            .setPositiveButton("Ok", (dialog, which) -> {
+                                // Request the permission again
+                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
+                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show();
+                } else {
+                    // Permission was denied, you can show a message to the user
+                    new AlertDialog.Builder(this)
+                            .setTitle("Permission needed")
+                            .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
+                            .setPositiveButton("Ok", (dialog, which) -> {
+                                // Redirect the user to the app's settings page
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            })
+                            //.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show();
+                    return;
+                }/*
                 // Permission was denied, you can show a message to the user
                 new AlertDialog.Builder(this)
                         .setTitle("Permission needed")
@@ -236,9 +331,29 @@ public class MainActivity extends AppCompatActivity {
                             intent.setData(uri);
                             startActivity(intent);
                         })
-                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        //.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .create()
                         .show();
+            }*/
+            }
+        }
+        if (requestCode == 2) {
+
+            // Check if the permission was granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 4);
+                }else {
+                    Intent serviceIntent = new Intent(context, PhoneStateService.class);
+                    context.startForegroundService(serviceIntent);
+                }
+            }
+        }
+        if (requestCode == 4) {
+            // Check if the permission was granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent serviceIntent = new Intent(context, PhoneStateService.class);
+                context.startForegroundService(serviceIntent);
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
