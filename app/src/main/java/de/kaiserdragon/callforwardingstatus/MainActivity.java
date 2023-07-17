@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -26,6 +27,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     Activity activity;
     final String TAG = "Main";
+    RadioButton radioButton1;
+   RadioButton radioButton2;
+   RadioButton radioButton3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         final ImageButton deleteButton1 = findViewById(R.id.delete_row1);
         final ImageButton deleteButton2 = findViewById(R.id.delete_row2);
         final ImageButton deleteButton3 = findViewById(R.id.delete_row3);
+        radioButton1= findViewById(R.id.radioButton1);
+        radioButton2= findViewById(R.id.radioButton2);
+        radioButton3= findViewById(R.id.radioButton3);
+
         phoneNumber1EditText.setText(getPhoneNumber(1));
         phoneNumber2EditText.setText(getPhoneNumber(2));
         phoneNumber3EditText.setText(getPhoneNumber(3));
@@ -81,6 +90,25 @@ public class MainActivity extends AppCompatActivity {
         deleteButton1.setOnClickListener(v -> deleteSQLData(phoneNumber1EditText,1));
         deleteButton2.setOnClickListener(v -> deleteSQLData(phoneNumber2EditText,2));
         deleteButton3.setOnClickListener(v -> deleteSQLData(phoneNumber3EditText,3));
+
+        phoneNumber1EditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                saveSQLData(phoneNumber1EditText,1);return true;
+            }
+            return false;
+        });
+        phoneNumber2EditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                saveSQLData(phoneNumber2EditText,2);return true;
+            }
+            return false;
+        });
+        phoneNumber3EditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                saveSQLData(phoneNumber3EditText,3);return true;
+            }
+            return false;
+        });
         phoneNumber1EditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -94,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //saveSQLData(phoneNumber1EditText,1);
+
             }
         });
         phoneNumber2EditText.addTextChangedListener(new TextWatcher() {
@@ -110,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //saveSQLData(phoneNumber2EditText,2);
+
             }
         });
         phoneNumber3EditText.addTextChangedListener(new TextWatcher() {
@@ -184,9 +212,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setCheckedRadioButton(){
        String[] array= databaseHelper.getSelected();
-        RadioButton radioButton1= findViewById(R.id.radioButton1);
-        RadioButton radioButton2= findViewById(R.id.radioButton2);
-        RadioButton radioButton3= findViewById(R.id.radioButton3);
         if (Objects.equals(array[0], "1"))radioButton1.setChecked(true);
         if (Objects.equals(array[0], "2"))radioButton2.setChecked(true);
         if (Objects.equals(array[0], "3"))radioButton3.setChecked(true);
@@ -224,21 +249,66 @@ public class MainActivity extends AppCompatActivity {
         values.put(databaseHelper.getColumnPhoneNumber(), phoneNumber);
         String whereClause = databaseHelper.getColumnId() + " = ?";
         String[] whereArgs = {String.valueOf(row)}; // Replace "1" with the ID of the row you want to update
-        int ok = database.update(databaseHelper.getTableName(), values, whereClause, whereArgs);
-        long insOk = 0;
-        if (ok == 0) {
+        int ok=0;
+        long insOk=0;
+
+        if (isIdExists(database,row)) {
+            ok = database.update(databaseHelper.getTableName(), values, whereClause, whereArgs);
+        }else {
             values.put(databaseHelper.getColumnId(), row);
             values.put(databaseHelper.getColumnSelected(),"false");
             insOk = database.insert(databaseHelper.getTableName(), null, values);
         }
-        if (insOk == 0 && ok == 1){
+        if ((insOk == row ) || ok == 1){
             Toast.makeText(context, getString(R.string.PhoneNumberSaved), Toast.LENGTH_SHORT).show();
             TypedValue typedValue = new TypedValue();
             getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
             int color = ContextCompat.getColor(this, typedValue.resourceId);
             numberInput.setTextColor(color);
+            if (isFirstEntry(database)) {
+                if (Objects.equals(row, 1))radioButton1.setChecked(true);
+                if (Objects.equals(row, 2))radioButton2.setChecked(true);
+                if (Objects.equals(row, 3))radioButton3.setChecked(true);
+            }
+        }
+        //database.close();
+    }
+
+    public boolean isIdExists(SQLiteDatabase db, int id) {
+        String[] columns = { "id" };
+        String selection = "id=?";
+        String[] selectionArgs = { String.valueOf(id) };
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query("phone_numbers", columns, selection, selectionArgs, null, null, null);
+            return cursor.moveToFirst();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
+
+    public boolean isFirstEntry(SQLiteDatabase db) {
+        String[] columns = { "COUNT(*)" };
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query("phone_numbers", columns, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                int count = cursor.getInt(0);
+                return count == 1;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return false; // Return false by default if an exception occurs or cursor is null
+    }
+
 
     private void deleteSQLData(EditText numberInput, int row){
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
@@ -246,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         String[] whereArgs = {String.valueOf(row)}; // Replace "1" with the ID of the row you want to delete
         database.delete(databaseHelper.getTableName(), whereClause, whereArgs);
         numberInput.setText(getPhoneNumber(row));
+        //database.close();
     }
 
     public void checkPermission(Activity activity) {
@@ -279,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 

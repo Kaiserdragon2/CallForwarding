@@ -77,7 +77,9 @@
                     android:ems="10"
                     android:hint="@string/Phone_number1"
                     android:importantForAutofill="no"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"/>
 
                 <ImageButton
                     android:id="@+id/save_row1"
@@ -114,7 +116,9 @@
                     android:ems="10"
                     android:hint="@string/Phone_number2"
                     android:importantForAutofill="no"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"/>
 
                 <ImageButton
                     android:id="@+id/save_row2"
@@ -151,7 +155,9 @@
                     android:ems="10"
                     android:hint="@string/Phone_number3"
                     android:importantForAutofill="no"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"/>
 
                 <ImageButton
                     android:id="@+id/save_row3"
