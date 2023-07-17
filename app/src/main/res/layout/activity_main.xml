@@ -79,6 +79,7 @@
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:singleLine="true"
+                    android:maxLines="1"
                     android:imeOptions="actionDone"/>
 
                 <ImageButton
@@ -118,6 +119,7 @@
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:singleLine="true"
+                    android:maxLines="1"
                     android:imeOptions="actionDone"/>
 
                 <ImageButton
@@ -157,6 +159,7 @@
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:singleLine="true"
+                    android:maxLines="1"
                     android:imeOptions="actionDone"/>
 
                 <ImageButton

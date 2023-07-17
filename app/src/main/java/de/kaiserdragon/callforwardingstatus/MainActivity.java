@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -93,19 +94,28 @@ public class MainActivity extends AppCompatActivity {
 
         phoneNumber1EditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                saveSQLData(phoneNumber1EditText,1);return true;
+                saveSQLData(phoneNumber1EditText,1);
+                InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                return true;
             }
             return false;
         });
         phoneNumber2EditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                saveSQLData(phoneNumber2EditText,2);return true;
+                saveSQLData(phoneNumber2EditText,2);
+                InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
             }
             return false;
         });
         phoneNumber3EditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                saveSQLData(phoneNumber3EditText,3);return true;
+                saveSQLData(phoneNumber3EditText,3);
+                InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
             }
             return false;
         });
@@ -278,31 +288,19 @@ public class MainActivity extends AppCompatActivity {
         String[] columns = { "id" };
         String selection = "id=?";
         String[] selectionArgs = { String.valueOf(id) };
-        Cursor cursor = null;
 
-        try {
-            cursor = db.query("phone_numbers", columns, selection, selectionArgs, null, null, null);
+        try (Cursor cursor = db.query("phone_numbers", columns, selection, selectionArgs, null, null, null)) {
             return cursor.moveToFirst();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
     }
 
     public boolean isFirstEntry(SQLiteDatabase db) {
         String[] columns = { "COUNT(*)" };
-        Cursor cursor = null;
 
-        try {
-            cursor = db.query("phone_numbers", columns, null, null, null, null, null);
+        try (Cursor cursor = db.query("phone_numbers", columns, null, null, null, null, null)) {
             if (cursor.moveToFirst()) {
                 int count = cursor.getInt(0);
                 return count == 1;
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
             }
         }
 
