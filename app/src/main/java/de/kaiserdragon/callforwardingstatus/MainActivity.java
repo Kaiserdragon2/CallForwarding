@@ -1,5 +1,7 @@
 package de.kaiserdragon.callforwardingstatus;
 
+import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -13,6 +15,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,8 +25,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -34,6 +41,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
         phoneNumber2EditText.setText(getPhoneNumber(2));
         phoneNumber3EditText.setText(getPhoneNumber(3));
         setCheckedRadioButton();
-
+        MultiSim(this);
+        //todo show on button Press
+        showSimSelectionPopup(this);
 
 
         // Set OnClickListeners on the ImageButton views
@@ -206,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             // Open the settings activity
             Intent intent = new Intent(this, SettingsActivity.class);
@@ -227,6 +237,82 @@ public class MainActivity extends AppCompatActivity {
         if (Objects.equals(array[0], "3"))radioButton3.setChecked(true);
         Log.i(TAG, "Retrieve Data"+ array[0]+"phone"+array[1]);
     }
+
+    public void MultiSim(Context context) {
+        SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
+        if (subscriptionManager != null) {
+            if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
+                 if (subscriptionList.size() <=1) {
+                     //todo multi sim button
+                     if (DEBUG) {
+                         for (SubscriptionInfo subscriptionInfo : subscriptionList) {
+                             int subscriptionId = subscriptionInfo.getSubscriptionId();
+                             // Use the subscriptionId as needed
+                             Log.d("Subscription", "Subscription ID: " + subscriptionId);
+                         }
+                     }
+                 }
+            }
+        }
+    }
+
+    public void showSimSelectionPopup(Context context) {
+        SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
+        if (subscriptionManager != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if (context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                    List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
+                    if (subscriptionList != null && !subscriptionList.isEmpty()) {
+                        SimSelectionDialog dialog = new SimSelectionDialog(context, subscriptionList);
+                        dialog.show();
+                    } else {
+                        Toast.makeText(context, "No SIM card available", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
+
+    public class SimSelectionDialog extends AlertDialog {
+        private ListView listView;
+        private ArrayAdapter<String> adapter;
+        private List<SubscriptionInfo> subscriptionList;
+
+        protected SimSelectionDialog(Context context, List<SubscriptionInfo> subscriptionList) {
+            super(context);
+            this.subscriptionList = subscriptionList;
+            init();
+        }
+
+        private void init() {
+            Context context = getContext();
+            listView = new ListView(context);
+            adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice);
+            for (SubscriptionInfo subscriptionInfo : subscriptionList) {
+                int subscriptionId = subscriptionInfo.getSubscriptionId();
+                String displayName = subscriptionInfo.getDisplayName().toString();
+                String simInfo = "SIM " + subscriptionId + ": \t " + displayName;
+                adapter.add(simInfo);
+            }
+            listView.setAdapter(adapter);
+            listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+            setView(listView);
+            setButton(BUTTON_POSITIVE, "OK", (dialog, which) -> {
+                int selectedItemPosition = listView.getCheckedItemPosition();
+                if (selectedItemPosition != ListView.INVALID_POSITION) {
+                    SubscriptionInfo selectedSubscription = subscriptionList.get(selectedItemPosition);
+                    int selectedSimId = selectedSubscription.getSubscriptionId();
+                    Toast.makeText(context, "Selected SIM ID: " + selectedSimId, Toast.LENGTH_SHORT).show();
+                    // Perform further actions with the selected SIM
+                    // todo Save selection somewhere 
+                }
+                dialog.dismiss();
+            });
+            setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
+        }
+    }
+
 
     private String getPhoneNumber(int row) {
         // Query the database to retrieve the data

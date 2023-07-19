@@ -9,12 +9,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+
+import java.util.List;
 
 public class CallForwardingReceiver extends BroadcastReceiver {
     final String TAG = "Receiver";
@@ -40,6 +45,25 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if (DEBUG)Log.i(TAG, String.valueOf(cfi));
         if (DEBUG) Log.v(TAG,phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+
+        SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
+
+        // Determine the default subscription ID
+        int defaultSubId = SubscriptionManager.getDefaultSubscriptionId();
+
+        // Check if the device supports multiple SIMs and retrieve active subscriptions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                List<SubscriptionInfo> activeSubscriptions = subscriptionManager.getActiveSubscriptionInfoList();
+                if (activeSubscriptions != null && !activeSubscriptions.isEmpty()) {
+                    // Choose the first active subscription
+                    SubscriptionInfo subscriptionInfo = activeSubscriptions.get(0);
+                    defaultSubId = subscriptionInfo.getSubscriptionId();
+                }
+            }
+        }
+        if (DEBUG) Log.v(TAG, String.valueOf(defaultSubId));
+
         Handler handler = new Handler();
         TelephonyManager.UssdResponseCallback responseCallback = new TelephonyManager.UssdResponseCallback() {
             @Override
