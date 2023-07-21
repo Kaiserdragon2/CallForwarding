@@ -33,4 +33,5 @@
     <string name="alpha">Alpha</string>
     <string name="callForwarding">CallForwarding</string>
     <string name="applyColor">Apply Color</string>
+    <string name="select_sim">Select Simcard</string>
 </resources>

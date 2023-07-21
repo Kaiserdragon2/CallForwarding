@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context="de.kaiserdragon.callforwardingstatus.MainActivity">
 
+    <Button
+        android:id="@+id/multisim_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/select_sim"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainText" />
+
     <TextView
         android:id="@+id/MainText"
         android:layout_width="wrap_content"
@@ -24,13 +40,13 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:foregroundGravity="center"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/MainText">
+        app:layout_constraintTop_toTopOf="@+id/multisim_button">
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -76,11 +92,11 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="@string/Phone_number1"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="phone"
-                    android:singleLine="true"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"/>
+                    android:singleLine="true" />
 
                 <ImageButton
                     android:id="@+id/save_row1"
@@ -116,11 +132,11 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="@string/Phone_number2"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="phone"
-                    android:singleLine="true"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"/>
+                    android:singleLine="true" />
 
                 <ImageButton
                     android:id="@+id/save_row2"
@@ -156,11 +172,11 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="@string/Phone_number3"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="phone"
-                    android:singleLine="true"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"/>
+                    android:singleLine="true" />
 
                 <ImageButton
                     android:id="@+id/save_row3"
@@ -200,9 +216,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.499" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

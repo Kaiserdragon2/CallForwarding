@@ -1,15 +1,14 @@
 package de.kaiserdragon.callforwardingstatus;
 
 import static android.content.Context.TELEPHONY_SERVICE;
-
 import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -29,11 +28,12 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if ("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING".equals(intent.getAction())) {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             String[] array = databaseHelper.getSelected();
-            if (DEBUG) Log.v(TAG,"Number = "+array[1]);
+            if (DEBUG) Log.v(TAG, "Number = " + array[1]);
             if (!array[1].equals("")) {
-                Toast.makeText(context,context.getString(R.string.setupCallForwarding) , Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.setupCallForwarding), Toast.LENGTH_LONG).show();
                 setCallForwarding(context, PhoneStateService.currentState, array[1]);
-            }else  Toast.makeText(context,context.getString(R.string.NoNumber) , Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(context, context.getString(R.string.NoNumber), Toast.LENGTH_SHORT).show();
         }
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Intent serviceIntent = new Intent(context, PhoneStateService.class);
@@ -41,18 +41,22 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         }
     }
 
+    public int getSavedSelectedSimId(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("SIM_PREFERENCES", Context.MODE_PRIVATE);
+        return preferences.getInt("SELECTED_SIM_ID", -1); // -1 is a default value if the preference is not found
+    }
+
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
-        if (DEBUG)Log.i(TAG, String.valueOf(cfi));
-        if (DEBUG) Log.v(TAG,phoneNumber);
+        if (DEBUG) Log.i(TAG, String.valueOf(cfi));
+        if (DEBUG) Log.v(TAG, phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 
-        SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
-
-        // Determine the default subscription ID
-        int defaultSubId = SubscriptionManager.getDefaultSubscriptionId();
-
-        // Check if the device supports multiple SIMs and retrieve active subscriptions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+        int defaultSubId = getSavedSelectedSimId(context);
+        if (defaultSubId <= 0) {
+            SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
+            // Determine the default subscription ID
+            defaultSubId = SubscriptionManager.getDefaultSubscriptionId();
+            // Check if the device supports multiple SIMs and retrieve active subscriptions
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 List<SubscriptionInfo> activeSubscriptions = subscriptionManager.getActiveSubscriptionInfoList();
                 if (activeSubscriptions != null && !activeSubscriptions.isEmpty()) {
@@ -78,16 +82,23 @@ public class CallForwardingReceiver extends BroadcastReceiver {
                 Toast.makeText(context, String.valueOf(failureCode), Toast.LENGTH_SHORT).show();
             }
         };
-
+        TelephonyManager manager1;
         if (!cfi) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 String ussdRequest = "*21*" + phoneNumber + "#";
-                if (DEBUG) Log.v(TAG,ussdRequest);
-                manager.sendUssdRequest(ussdRequest, responseCallback, handler);
+                if (DEBUG) Log.v(TAG, ussdRequest);
+
+                // Set the subscription ID for call forwarding
+                manager1 = manager.createForSubscriptionId(defaultSubId);
+
+                manager1.sendUssdRequest(ussdRequest, responseCallback, handler);
             }
         } else {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                manager.sendUssdRequest("#21#", responseCallback, handler);
+                // Set the subscription ID for call forwarding
+                manager1 = manager.createForSubscriptionId(defaultSubId);
+
+                manager1.sendUssdRequest("#21#", responseCallback, handler);
             }
         }
     }

@@ -34,4 +34,5 @@
     <string name="alpha">Transparenz</string>
     <string name="callForwarding">Rufumleitung</string>
     <string name="applyColor">Farbe anwenden</string>
+    <string name="select_sim">Wähle eine SIM</string>
 </resources>
