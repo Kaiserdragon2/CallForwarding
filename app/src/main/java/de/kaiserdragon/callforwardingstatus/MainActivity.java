@@ -243,9 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
                 if (subscriptionList.size() <= 1) {
                     findViewById(R.id.multisim_button).setVisibility(View.GONE);
-                } else findViewById(R.id.multisim_button).setOnClickListener(view -> {
-                    showSimSelectionPopup(this);
-                });
+                } else findViewById(R.id.multisim_button).setOnClickListener(view -> showSimSelectionPopup(this));
             }
         }
     }

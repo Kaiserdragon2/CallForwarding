@@ -100,7 +100,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
             backColor = intent.getIntExtra("backColor", 0);
             if(DEBUG)Log.v(TAG,"backColorPos:"+backColor);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
-            updateBackground(context,backColor,views);
+            updateBackground(backColor,views);
             //Drawable drawable = ContextCompat.getDrawable(context,R.drawable.widget_background_round);
             // Set the color of the drawable
             //DrawableCompat.setTint(drawable, color);
@@ -113,7 +113,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
 
     }
 
-    public static void updateBackground(Context context,int pos, RemoteViews views){
+    public static void updateBackground(int pos, RemoteViews views){
         if (pos==0) views.setInt(R.id.widget_button, "setBackgroundResource", R.drawable.widget_background_round);
         if (pos==1) views.setInt(R.id.widget_button, "setBackgroundResource", R.drawable.widget_background_black);
         if (pos==2) views.setInt(R.id.widget_button, "setBackgroundResource", R.drawable.widget_background_white);
@@ -132,7 +132,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.StatusText, cfi ? context.getString(R.string.CallForwardingActive) : context.getString(R.string.CallForwardingInactive));
         views.setViewVisibility(R.id.StatusText, ViewText);
         views.setInt(R.id.StatusText,"setTextColor", TextColor);
-        updateBackground(context,backColor, views);
+        updateBackground(backColor, views);
         //views.setInt(R.id.widget_button, "setBackgroundColor",backColor);
         if (cfi) views.setInt(R.id.ImageCallForwarding, "setColorFilter", Color.GREEN);
         else views.setInt(R.id.ImageCallForwarding, "setColorFilter", Color.RED);

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,10 +14,10 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
+
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     // Key for the shared preferences file
@@ -38,7 +37,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     SeekBar ValueSeekBar;
     SeekBar AlphaSeekBar;
     TextView showColor;
-    private int mBackgroundColor;
     int backColorPos;
 
     @Override
@@ -49,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         BarListener();
 
         // Enable the back button on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Settings");
 
 
@@ -212,9 +210,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         if (DEBUG) Log.v(TAG, "Send Intend Color update" + color);
         // Update the background of the widget
-        //RemoteViews views = new RemoteViews(getPackageName(), R.layout.forwarding_status_widget);
-        //views.setInt(R.id.widget_button, "setBackgroundColor", color);
-        //AppWidgetManager.getInstance(this).updateAppWidget(new ComponentName(this, ForwardingStatusWidget.class), views);
         Intent intent = new Intent(this, ForwardingStatusWidget.class);
         intent.setAction("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_COLOR");
         intent.putExtra("color", color);
