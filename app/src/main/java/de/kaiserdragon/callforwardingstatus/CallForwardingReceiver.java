@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CallForwardingReceiver extends BroadcastReceiver {
     final String TAG = "Receiver";
@@ -35,7 +36,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             } else
                 Toast.makeText(context, context.getString(R.string.NoNumber), Toast.LENGTH_SHORT).show();
         }
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
             Intent serviceIntent = new Intent(context, PhoneStateService.class);
             context.startService(serviceIntent);
         }
@@ -66,7 +67,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
                 }
             }
         }
-        if (DEBUG) Log.v(TAG, String.valueOf(defaultSubId));
+
 
         Handler handler = new Handler();
         TelephonyManager.UssdResponseCallback responseCallback = new TelephonyManager.UssdResponseCallback() {
@@ -86,7 +87,6 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if (!cfi) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 String ussdRequest = "*21*" + phoneNumber + "#";
-                if (DEBUG) Log.v(TAG, ussdRequest);
 
                 // Set the subscription ID for call forwarding
                 manager1 = manager.createForSubscriptionId(defaultSubId);

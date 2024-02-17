@@ -1,5 +1,9 @@
 package de.kaiserdragon.callforwardingstatus;
 
+import static android.Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE;
+
+import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 saveSQLData(phoneNumber1EditText, 1);
                 InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 return true;
             }
             return false;
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 saveSQLData(phoneNumber2EditText, 2);
                 InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 return true;
             }
             return false;
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 saveSQLData(phoneNumber3EditText, 3);
                 InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 return true;
             }
             return false;
@@ -241,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         if (subscriptionManager != null) {
             if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
+                if (DEBUG) Log.i(TAG, String.valueOf(subscriptionList.size()));
                 if (subscriptionList.size() <= 1) {
                     findViewById(R.id.multisim_button).setVisibility(View.GONE);
                 } else findViewById(R.id.multisim_button).setOnClickListener(view -> showSimSelectionPopup(this));
