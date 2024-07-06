@@ -34,6 +34,8 @@ public class PhoneStateService extends Service {
     Context context;
     static final String TAG = "Service";
     private final Executor executor = Executors.newSingleThreadExecutor();
+    // Define NOTIFICATION_ID as a constant
+    private static final int NOTIFICATION_ID = 1;
 
 
     @TargetApi(Build.VERSION_CODES.R)
@@ -66,57 +68,56 @@ public class PhoneStateService extends Service {
         }
     };
 
-
-
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        // Create the notification channel
+        createNotificationChannel();
+        startForegroundService();
+        registerPhoneStateListener();
+    }
+
+    private void createNotificationChannel() {
         NotificationChannel serviceChannel = new NotificationChannel(
                 CHANNEL_ID,
-                "Call Forwarding Service Channel",
+                getString(R.string.notification_channel_name), // Use string resources for text
                 NotificationManager.IMPORTANCE_DEFAULT
         );
 
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(serviceChannel);
+    }
 
-        // Create a notification for the foreground service
+    private void startForegroundService() {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.NotificationTitle))
                 .setContentText(getString(R.string.NotificationText))
                 .setSmallIcon(R.drawable.ic_call_forwarding)
                 .build();
 
-        // Start the service as a foreground service
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE){
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)
                     == PackageManager.PERMISSION_GRANTED) {
-
-                startForeground(1, notification, FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
-                // Start foreground service normally
+                startForeground(NOTIFICATION_ID, notification, FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
             } else {
-                // Handle permission not granted scenario (request permission, inform user, etc.)
-                Log.d(TAG,"Permission not granted");
+                // Handle permission not granted (request permission, inform user, etc.)
+                Log.w(TAG, "FOREGROUND_SERVICE_SPECIAL_USE permission not granted");
+                // Consider gracefully stopping the service if this permission is critical
             }
-
         } else {
-            startForeground(1, notification);
+            startForeground(NOTIFICATION_ID, notification);
         }
+    }
 
-
-
-        // Register MyPhoneStateListener as a phone state listener
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+    private void registerPhoneStateListener() {
+        TelephonyManager telephonyManager = getSystemService(TelephonyManager.class); // Use class reference for type safety
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             MyCallForwardingListener listener = new MyCallForwardingListener();
             telephonyManager.registerTelephonyCallback(Executors.newSingleThreadExecutor(), listener);
-            if (DEBUG) Log.i(TAG, "Register");
-
+            if (DEBUG) Log.i(TAG, "Registered TelephonyCallback");
         } else {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR);
+            if (DEBUG) Log.i(TAG, "Registered PhoneStateListener");
         }
     }
 

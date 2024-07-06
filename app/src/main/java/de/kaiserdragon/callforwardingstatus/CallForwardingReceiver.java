@@ -1,6 +1,7 @@
 package de.kaiserdragon.callforwardingstatus;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +49,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         return preferences.getInt("SELECTED_SIM_ID", -1); // -1 is a default value if the preference is not found
     }
 
+
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
         if (DEBUG) Log.i(TAG, String.valueOf(cfi));
         if (DEBUG) Log.v(TAG, phoneNumber);
@@ -75,6 +78,8 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             public void onReceiveUssdResponse(TelephonyManager telephonyManager, String request, CharSequence response) {
                 super.onReceiveUssdResponse(telephonyManager, request, response);
                 Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                Log.v(TAG, request);
+
             }
 
             @Override
