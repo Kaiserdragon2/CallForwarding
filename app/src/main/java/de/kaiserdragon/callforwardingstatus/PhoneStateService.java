@@ -28,6 +28,9 @@ import androidx.core.app.NotificationCompat;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import kotlin.Deprecated;
+import kotlin.Suppress;
+
 public class PhoneStateService extends Service {
     private static final String CHANNEL_ID = "CallForwardingServiceID";
     public static boolean currentState;
@@ -109,6 +112,12 @@ public class PhoneStateService extends Service {
         }
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @SuppressWarnings("deprecation")
     private void registerPhoneStateListener() {
         TelephonyManager telephonyManager = getSystemService(TelephonyManager.class); // Use class reference for type safety
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -122,6 +131,7 @@ public class PhoneStateService extends Service {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onDestroy() {
         Log.d(TAG,"Destroy");
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
