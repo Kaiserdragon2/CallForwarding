@@ -34,4 +34,5 @@
     <string name="callForwarding">CallForwarding</string>
     <string name="applyColor">Apply Color</string>
     <string name="select_sim">Select Simcard</string>
+    <string name="notification_channel_name">CallForwarding</string>
 </resources>
