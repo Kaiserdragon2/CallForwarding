@@ -41,9 +41,9 @@ public class PhoneStateService extends Service {
     private static final int NOTIFICATION_ID = 1;
 
 
+    /** @noinspection deprecation*/
     @TargetApi(Build.VERSION_CODES.R)
-    private final PhoneStateListener phoneStateListener = new PhoneStateListener(executor) {
-        /** @noinspection deprecation*/
+    private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallForwardingIndicatorChanged(boolean cfi) {
             if (DEBUG)Log.i(TAG, "onCallForwardingIndicatorChanged  CFI  Old=" + cfi);
