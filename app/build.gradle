@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "de.kaiserdragon.callforwardingstatus"
-        minSdk 26
+        minSdk 28
         targetSdk 34
         versionCode 6
         versionName "1.8"

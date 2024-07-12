@@ -34,11 +34,12 @@ import kotlin.Suppress;
 public class PhoneStateService extends Service {
     private static final String CHANNEL_ID = "CallForwardingServiceID";
     public static boolean currentState;
-    Context context;
+    Context appcontext;
     static final String TAG = "Service";
     private final Executor executor = Executors.newSingleThreadExecutor();
     // Define NOTIFICATION_ID as a constant
     private static final int NOTIFICATION_ID = 1;
+    private MyCallForwardingListener callForwardingListener;
 
 
     /** @noinspection deprecation*/
@@ -50,7 +51,7 @@ public class PhoneStateService extends Service {
             // Get the current state of unconditional call forwarding
             currentState = cfi;
             // Create an Intent with the android.appwidget.action.APPWIDGET_UPDATE action
-            Intent intent = new Intent(context, ForwardingStatusWidget.class);
+            Intent intent = new Intent(appcontext, ForwardingStatusWidget.class);
             intent.setAction("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI");
             //Toast.makeText(context, "OLD", Toast.LENGTH_SHORT).show();
             // Add the app widget IDs as an extra
@@ -64,7 +65,7 @@ public class PhoneStateService extends Service {
             sendBroadcast(intent);
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(appcontext, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                     super.onCallForwardingIndicatorChanged(cfi);
                 }
             }
@@ -74,10 +75,10 @@ public class PhoneStateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        appcontext = getApplicationContext();
         createNotificationChannel();
         startForegroundService();
-        registerPhoneStateListener();
+
     }
 
     private void createNotificationChannel() {
@@ -99,7 +100,7 @@ public class PhoneStateService extends Service {
                 .build();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE){
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)
+            if (ActivityCompat.checkSelfPermission(appcontext, Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE)
                     == PackageManager.PERMISSION_GRANTED) {
                 startForeground(NOTIFICATION_ID, notification, FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
             } else {
@@ -114,16 +115,19 @@ public class PhoneStateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        registerPhoneStateListener();
         return START_STICKY;
     }
 
     @SuppressWarnings("deprecation")
     private void registerPhoneStateListener() {
         TelephonyManager telephonyManager = getSystemService(TelephonyManager.class); // Use class reference for type safety
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            MyCallForwardingListener listener = new MyCallForwardingListener();
-            telephonyManager.registerTelephonyCallback(Executors.newSingleThreadExecutor(), listener);
-            if (DEBUG) Log.i(TAG, "Registered TelephonyCallback");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (callForwardingListener == null) { // Check if already registered
+                callForwardingListener = new MyCallForwardingListener();
+                telephonyManager.registerTelephonyCallback(executor, callForwardingListener);
+                if (DEBUG) Log.i(TAG, "Registered TelephonyCallback");
+            }
         } else {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR);
             if (DEBUG) Log.i(TAG, "Registered PhoneStateListener");
@@ -133,11 +137,16 @@ public class PhoneStateService extends Service {
     @Override
     @SuppressWarnings("deprecation")
     public void onDestroy() {
-        Log.d(TAG,"Destroy");
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S) telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        Log.d(TAG, "Destroy");
+        TelephonyManager telephonyManager = getSystemService(TelephonyManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&callForwardingListener != null) {
+            telephonyManager.unregisterTelephonyCallback(callForwardingListener); // Unregister explicitly
+            callForwardingListener = null;
+            if (DEBUG) Log.i(TAG, "Unregistered TelephonyCallback");
+        } else {
+            telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
         super.onDestroy();
-        // Unregister MyPhoneStateListener as a phone state listener
     }
 
     @Override
@@ -156,7 +165,7 @@ public class PhoneStateService extends Service {
                 //Toast.makeText(context, "New", Toast.LENGTH_SHORT).show();
                 currentState = cfi;
                 // Create an Intent with the android.appwidget.action.APPWIDGET_UPDATE action
-                Intent intent = new Intent(context, ForwardingStatusWidget.class);
+                Intent intent = new Intent(appcontext, ForwardingStatusWidget.class);
                 intent.setAction("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI");
 
                 // Add the app widget IDs as an extra
