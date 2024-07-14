@@ -43,6 +43,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.OutOfQuotaPolicy;
+import androidx.work.WorkManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     RadioButton radioButton1;
     RadioButton radioButton2;
     RadioButton radioButton3;
+    Constraints constraints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +74,15 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         activity = this;
 
+        // Define constraints for the work request
+        constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresCharging(false)
+                .build();
+
 
         checkPermission(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
-        }
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
 
         // Find the EditText views and ImageButton views
         final EditText phoneNumber1EditText = findViewById(R.id.PhoneNumber1);
@@ -403,8 +414,16 @@ public class MainActivity extends AppCompatActivity {
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             //Permission already granted start service
-            Intent serviceIntent = new Intent(context, PhoneStateService.class);
-            context.startForegroundService(serviceIntent);
+            //Intent serviceIntent = new Intent(context, PhoneStateService.class);
+            //context.startForegroundService(serviceIntent);
+
+            //Work Manger
+            // Create a OneTimeWorkRequest
+            OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(PhoneStateWorker.class)
+                    .setConstraints(constraints)
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .build();
+            WorkManager.getInstance(this).enqueueUniqueWork("Check CFI", ExistingWorkPolicy.KEEP,workRequest);
         }
     }
 
@@ -417,9 +436,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted, you can do the required task
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, 2);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
-                }
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
                     // Show a dialog explaining the need for the permission
@@ -474,16 +491,32 @@ public class MainActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
                     ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 4);
                 } else {
-                    Intent serviceIntent = new Intent(context, PhoneStateService.class);
-                    context.startForegroundService(serviceIntent);
+                    //Intent serviceIntent = new Intent(context, PhoneStateService.class);
+                    //context.startForegroundService(serviceIntent);
+                    //Work Manger
+                    // Enqueue the PhoneStateWorker
+                    // Create a OneTimeWorkRequest
+                    OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(PhoneStateWorker.class)
+                            .setConstraints(constraints)
+                            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                            .build();
+                    WorkManager.getInstance(this).enqueueUniqueWork("Check CFI", ExistingWorkPolicy.KEEP,workRequest);
                 }
             }
         }
         if (requestCode == 4) {
             // Check if the permission was granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent serviceIntent = new Intent(context, PhoneStateService.class);
-                context.startForegroundService(serviceIntent);
+                //Intent serviceIntent = new Intent(context, PhoneStateService.class);
+                //context.startForegroundService(serviceIntent);
+                //Work Manger
+                // Enqueue the PhoneStateWorker
+                // Create a OneTimeWorkRequest
+                OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(PhoneStateWorker.class)
+                        .setConstraints(constraints)
+                        .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                        .build();
+                WorkManager.getInstance(this).enqueueUniqueWork("Check CFI", ExistingWorkPolicy.KEEP,workRequest);
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

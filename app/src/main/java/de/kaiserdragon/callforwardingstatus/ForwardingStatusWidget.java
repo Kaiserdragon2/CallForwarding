@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.core.app.ActivityCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 
 /**
@@ -162,8 +164,12 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
             return;
         }
         if (DEBUG) Log.v(TAG,"onUpdate got called");
-        Intent serviceIntent = new Intent(context, PhoneStateService.class);
-        context.startForegroundService(serviceIntent);
+        //Intent serviceIntent = new Intent(context, PhoneStateService.class);
+        //context.startForegroundService(serviceIntent);
+        //Work Manager
+        // Enqueue the PhoneStateWorker
+        //OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(PhoneStateWorker.class).build();
+        //WorkManager.getInstance(context).enqueue(workRequest);
         updateWidget(context, currentState);
     }
 
