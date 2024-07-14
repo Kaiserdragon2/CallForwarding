@@ -1,8 +1,6 @@
 package de.kaiserdragon.callforwardingstatus;
 
 import static android.content.Context.TELEPHONY_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -19,9 +17,9 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
+
 
 public class CallForwardingReceiver extends BroadcastReceiver {
     final String TAG = "Receiver";
@@ -31,8 +29,9 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if ("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING".equals(intent.getAction())) {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             String[] array = databaseHelper.getSelected();
-            if (DEBUG) Log.v(TAG, "Number = " + array[1]);
-            if (!array[1].equals("")) {
+            databaseHelper.close();
+            //if (DEBUG) Log.v(TAG, "Number = " + array[1]);
+            if (!array[1].isEmpty()) {
                 Toast.makeText(context, context.getString(R.string.setupCallForwarding), Toast.LENGTH_LONG).show();
                 setCallForwarding(context, PhoneStateService.currentState, array[1]);
             } else
@@ -51,8 +50,8 @@ public class CallForwardingReceiver extends BroadcastReceiver {
 
 
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
-        if (DEBUG) Log.i(TAG, String.valueOf(cfi));
-        if (DEBUG) Log.v(TAG, phoneNumber);
+        //if (DEBUG) Log.i(TAG, String.valueOf(cfi));
+        //if (DEBUG) Log.v(TAG, phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 
         int defaultSubId = getSavedSelectedSimId(context);

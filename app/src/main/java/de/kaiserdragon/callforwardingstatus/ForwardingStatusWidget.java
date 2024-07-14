@@ -1,6 +1,5 @@
 package de.kaiserdragon.callforwardingstatus;
 
-
 import static android.content.Context.MODE_PRIVATE;
 
 import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
@@ -84,13 +83,15 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        load(context);
+        //load(context);
+        Log.v(TAG,"onReceive got called");
         if ("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI".equals(intent.getAction())) {
             // Get the current CFI value from the Intent extra
             currentState = intent.getBooleanExtra("cfi", currentState);
+            if(DEBUG)Log.v(TAG,"CFI:"+currentState);
             //currentState = cfi;
-
-            save(context);
+            PhoneStateService.currentState = currentState;
+            //save(context);
             // Update the widget with the current CFI value
             updateWidget(context, currentState);
         }
@@ -163,10 +164,7 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
         if (DEBUG) Log.v(TAG,"onUpdate got called");
         Intent serviceIntent = new Intent(context, PhoneStateService.class);
         context.startForegroundService(serviceIntent);
-        load(context);
         updateWidget(context, currentState);
-
-
     }
 
     @Override

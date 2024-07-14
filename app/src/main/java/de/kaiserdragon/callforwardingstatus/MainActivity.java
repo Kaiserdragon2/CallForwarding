@@ -1,7 +1,5 @@
 package de.kaiserdragon.callforwardingstatus;
 
-import static android.Manifest.permission.FOREGROUND_SERVICE_SPECIAL_USE;
-
 import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
@@ -237,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         if (Objects.equals(array[0], "1")) radioButton1.setChecked(true);
         if (Objects.equals(array[0], "2")) radioButton2.setChecked(true);
         if (Objects.equals(array[0], "3")) radioButton3.setChecked(true);
-        Log.i(TAG, "Retrieve Data" + array[0] + "phone" + array[1]);
+        //Log.i(TAG, "Retrieve Data" + array[0] + "phone" + array[1]);
     }
 
     public void MultiSim(Context context) {
@@ -292,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getPhoneNumber(int row) {
         // Query the database to retrieve the data
-        Log.i(TAG, "Retrieve Data");
+        //Log.i(TAG, "Retrieve Data");
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
         String[] columns = {databaseHelper.getColumnPhoneNumber()};
         String selection = databaseHelper.getColumnId() + " = ?";
@@ -494,7 +492,6 @@ public class MainActivity extends AppCompatActivity {
     public class SimSelectionDialog extends AlertDialog {
         private final List<SubscriptionInfo> subscriptionList;
         private ListView listView;
-        private ArrayAdapter<String> adapter;
 
         protected SimSelectionDialog(Context context, List<SubscriptionInfo> subscriptionList) {
             super(context);
@@ -505,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
         private void init() {
             Context context = getContext();
             listView = new ListView(context);
-            adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice);
             for (SubscriptionInfo subscriptionInfo : subscriptionList) {
                 int subscriptionId = subscriptionInfo.getSubscriptionId();
                 String displayName = subscriptionInfo.getDisplayName().toString();
