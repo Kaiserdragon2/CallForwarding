@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi;
 
 import java.lang.ref.WeakReference;
 
-import de.kaiserdragon.callforwardingstatus.BuildConfig;
 import de.kaiserdragon.callforwardingstatus.ForwardingStatusWidget;
 import de.kaiserdragon.callforwardingstatus.PhoneStateService;
 
@@ -28,12 +27,9 @@ public class CallForwardingListener extends TelephonyCallback implements Telepho
     @Override
     public void onCallForwardingIndicatorChanged(boolean callForwardingIndicator) {
 
-            if (BuildConfig.DEBUG) {
-                Log.i(TAG, "onCallForwardingIndicatorChanged - New CFI (different from last): " + callForwardingIndicator);
-
-                PhoneStateService.currentState = callForwardingIndicator;
-                sendWidgetUpdateBroadcast(callForwardingIndicator);
-            }
+        Log.i(TAG, "onCallForwardingIndicatorChanged - New CFI: " + callForwardingIndicator);
+        PhoneStateService.currentState = callForwardingIndicator;
+        sendWidgetUpdateBroadcast(callForwardingIndicator);
 
     }
 

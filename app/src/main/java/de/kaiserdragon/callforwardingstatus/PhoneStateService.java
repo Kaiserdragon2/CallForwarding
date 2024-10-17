@@ -30,7 +30,7 @@ public class PhoneStateService extends Service {
     private static final String CHANNEL_ID = "CallForwardingServiceID";
     public static boolean currentState;
     Context appcontext;
-    static final String TAG = "Service";
+    static final String TAG = "CallForwardingStateService";
 
     // Define NOTIFICATION_ID as a constant
     private static final int NOTIFICATION_ID = 1;
@@ -65,7 +65,6 @@ public class PhoneStateService extends Service {
         appcontext = getApplicationContext();
         createNotificationChannel();
         startForegroundService();
-
     }
 
     private void createNotificationChannel() {
@@ -117,7 +116,7 @@ public class PhoneStateService extends Service {
             }
         } else {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR);
-            //if (DEBUG) Log.i(TAG, "Registered PhoneStateListener");
+            if (DEBUG) Log.i(TAG, "Registered PhoneStateListener");
         }
     }
 

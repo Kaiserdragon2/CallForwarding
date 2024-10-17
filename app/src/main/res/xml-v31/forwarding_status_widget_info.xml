@@ -12,7 +12,7 @@
     android:previewImage="@drawable/ic_call_forwarding"
     android:previewLayout="@layout/forwarding_status_widget"
     android:resizeMode="horizontal|vertical"
-    android:targetCellWidth="3"
+    android:targetCellWidth="1"
     android:targetCellHeight="1"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

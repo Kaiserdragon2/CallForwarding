@@ -39,7 +39,6 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI" />
-                <action android:name="de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_COLOR" />
             </intent-filter>
 
             <meta-data
@@ -56,12 +55,6 @@
                 <action android:name="de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING" />
             </intent-filter>
         </receiver>
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

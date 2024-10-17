@@ -22,8 +22,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -47,6 +45,8 @@ import androidx.core.content.ContextCompat;
 import java.util.List;
 import java.util.Objects;
 
+import de.kaiserdragon.callforwardingstatus.helper.DatabaseHelper;
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_READ_PHONE_STATE_PERMISSION = 1;
 
@@ -69,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         checkPermission(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
-        }
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
 
         // Find the EditText views and ImageButton views
         final EditText phoneNumber1EditText = findViewById(R.id.PhoneNumber1);
@@ -200,30 +198,6 @@ public class MainActivity extends AppCompatActivity {
             // saveSQLData(number,selectedId)
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            // Open the settings activity
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void colorTextSaveStatus(EditText numberInput) {
@@ -417,9 +391,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted, you can do the required task
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, 2);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
-                }
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
                     // Show a dialog explaining the need for the permission

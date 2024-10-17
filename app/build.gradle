@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "de.kaiserdragon.callforwardingstatus"
         minSdk 28
-        targetSdk 34
+        targetSdk 35
         versionCode 7
-        versionName "1.9"
+        versionName "2.0dev"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +50,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }

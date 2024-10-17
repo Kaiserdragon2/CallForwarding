@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat;
 import java.util.List;
 import java.util.Objects;
 
+import de.kaiserdragon.callforwardingstatus.helper.DatabaseHelper;
+
 
 public class CallForwardingReceiver extends BroadcastReceiver {
     final String TAG = "Receiver";
@@ -50,7 +52,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
 
 
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
-        //if (DEBUG) Log.i(TAG, String.valueOf(cfi));
+        Log.v(TAG, "setCallForwarding "+ cfi);
         //if (DEBUG) Log.v(TAG, phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 

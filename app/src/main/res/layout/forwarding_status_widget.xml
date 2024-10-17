@@ -20,19 +20,4 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_call_forwarding" />
 
-    <TextView
-        android:id="@+id/StatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ImageCallForwarding"
-        android:layout_alignBottom="@+id/ImageCallForwarding"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@+id/ImageCallForwarding"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center"
-        android:text="@string/CallForwardingActive"
-        android:textSize="16sp" />
-
 </RelativeLayout>

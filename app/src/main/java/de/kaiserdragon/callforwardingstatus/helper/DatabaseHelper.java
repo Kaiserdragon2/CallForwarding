@@ -1,4 +1,4 @@
-package de.kaiserdragon.callforwardingstatus;
+package de.kaiserdragon.callforwardingstatus.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
