@@ -40,6 +40,7 @@ public class CallForwardingReceiver extends BroadcastReceiver {
                 Toast.makeText(context, context.getString(R.string.NoNumber), Toast.LENGTH_SHORT).show();
         }
         if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
+            Log.v(TAG,"Boot Complete: Start Service");
             Intent serviceIntent = new Intent(context, PhoneStateService.class);
             context.startService(serviceIntent);
         }

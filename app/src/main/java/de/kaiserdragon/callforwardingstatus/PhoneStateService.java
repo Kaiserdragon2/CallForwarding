@@ -62,6 +62,7 @@ public class PhoneStateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG,"Start Service");
         appcontext = getApplicationContext();
         createNotificationChannel();
         startForegroundService();
