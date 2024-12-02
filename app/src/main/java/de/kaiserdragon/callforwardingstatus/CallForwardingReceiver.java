@@ -39,10 +39,12 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             } else
                 Toast.makeText(context, context.getString(R.string.NoNumber), Toast.LENGTH_SHORT).show();
         }
-        if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
-            Log.v(TAG,"Boot Complete: Start Service");
-            Intent serviceIntent = new Intent(context, PhoneStateService.class);
-            context.startService(serviceIntent);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
+                Log.v(TAG, "Boot Complete: Start Service");
+                Intent serviceIntent = new Intent(context, PhoneStateService.class);
+                context.startService(serviceIntent);
+            }
         }
     }
 
