@@ -3,7 +3,7 @@
 With this app you can forward your calls on a simple push of a button.
 Be it in the app or from a widget.
 
-[<img src="docs/github_badge.png" alt="Get it on GitHub" height="90">](https://github.com/Kaiserdragon2/IconRequest/releases) [<img src="https://raw.githubusercontent.com/Kaiserdragon2/IconRequest/main/docs/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="90">](https://apt.izzysoft.de/fdroid/index/apk/de.kaiserdragon.callforwardingstatus)
+[<img src="docs/github_badge.png" alt="Get it on GitHub" height="90">](https://github.com/Kaiserdragon2/CallForwarding/releases) [<img src="https://raw.githubusercontent.com/Kaiserdragon2/IconRequest/main/docs/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="90">](https://apt.izzysoft.de/fdroid/index/apk/de.kaiserdragon.callforwardingstatus)
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="90">](https://play.google.com/store/apps/details?id=de.kaiserdragon.callforwardingstatus)
 
 #### Features:
