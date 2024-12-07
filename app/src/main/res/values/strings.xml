@@ -35,4 +35,5 @@
     <string name="applyColor">Apply Color</string>
     <string name="select_sim">Select Simcard</string>
     <string name="notification_channel_name">CallForwarding</string>
+    <string name="allow_boot">Allow Start on Boot</string>
 </resources>

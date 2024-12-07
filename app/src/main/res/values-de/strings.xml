@@ -36,4 +36,5 @@
     <string name="applyColor">Farbe anwenden</string>
     <string name="select_sim">Wähle eine SIM</string>
     <string name="notification_channel_name">Rufumleitung</string>
+    <string name="allow_boot">Erlaube Autostart</string>
 </resources>

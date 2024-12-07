@@ -22,7 +22,6 @@ import java.util.Objects;
 
 import de.kaiserdragon.callforwardingstatus.helper.DatabaseHelper;
 
-
 public class CallForwardingReceiver extends BroadcastReceiver {
     final String TAG = "Receiver";
 
@@ -32,12 +31,15 @@ public class CallForwardingReceiver extends BroadcastReceiver {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             String[] array = databaseHelper.getSelected();
             databaseHelper.close();
-            //if (DEBUG) Log.v(TAG, "Number = " + array[1]);
             if (!array[1].isEmpty()) {
                 Toast.makeText(context, context.getString(R.string.setupCallForwarding), Toast.LENGTH_LONG).show();
                 setCallForwarding(context, PhoneStateService.currentState, array[1]);
-            } else
+            } else {
+                if (PhoneStateService.currentState) {
+                    setCallForwarding(context, true, "");
+                }
                 Toast.makeText(context, context.getString(R.string.NoNumber), Toast.LENGTH_SHORT).show();
+            }
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
@@ -53,9 +55,8 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         return preferences.getInt("SELECTED_SIM_ID", -1); // -1 is a default value if the preference is not found
     }
 
-
     private void setCallForwarding(Context context, boolean cfi, String phoneNumber) {
-        Log.v(TAG, "setCallForwarding "+ cfi);
+        Log.v(TAG, "setCallForwarding " + cfi);
         //if (DEBUG) Log.v(TAG, phoneNumber);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 
@@ -74,7 +75,6 @@ public class CallForwardingReceiver extends BroadcastReceiver {
                 }
             }
         }
-
 
         Handler handler = new Handler();
         TelephonyManager.UssdResponseCallback responseCallback = new TelephonyManager.UssdResponseCallback() {
@@ -96,17 +96,14 @@ public class CallForwardingReceiver extends BroadcastReceiver {
         if (!cfi) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 String ussdRequest = "*21*" + phoneNumber + "#";
-
                 // Set the subscription ID for call forwarding
                 manager1 = manager.createForSubscriptionId(defaultSubId);
-
                 manager1.sendUssdRequest(ussdRequest, responseCallback, handler);
             }
         } else {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 // Set the subscription ID for call forwarding
                 manager1 = manager.createForSubscriptionId(defaultSubId);
-
                 manager1.sendUssdRequest("#21#", responseCallback, handler);
             }
         }

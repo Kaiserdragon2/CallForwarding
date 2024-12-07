@@ -4,6 +4,7 @@ import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -49,8 +50,6 @@ import de.kaiserdragon.callforwardingstatus.helper.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_READ_PHONE_STATE_PERMISSION = 1;
-
-
     final DatabaseHelper databaseHelper = new DatabaseHelper(this);
     final String TAG = "Main";
     //SQLiteDatabase database = databaseHelper.getWritableDatabase();
@@ -61,15 +60,37 @@ public class MainActivity extends AppCompatActivity {
     RadioButton radioButton3;
 
     @Override
+    protected void onRestart() {
+        checkPermission(this);
+        super.onRestart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
         activity = this;
 
-
         checkPermission(this);
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+        //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+
+        Button autoBootbutton = findViewById(R.id.autoBoot);
+        String manufacturer = android.os.Build.MANUFACTURER;
+        // Check if the manufacturer matches any of the specified brands
+        if ("xiaomi".equalsIgnoreCase(manufacturer) ||
+                "oppo".equalsIgnoreCase(manufacturer) ||
+                "vivo".equalsIgnoreCase(manufacturer) ||
+                "Letv".equalsIgnoreCase(manufacturer) ||
+                "Honor".equalsIgnoreCase(manufacturer)) {
+
+            // Set the button to be visible if the manufacturer matches any of the specified ones
+            autoBootbutton.setVisibility(View.VISIBLE);
+            autoBootbutton.setOnClickListener(view -> addAutoStartup());
+        } else {
+            // You can set the button to INVISIBLE or GONE if the manufacturer doesn't match
+            autoBootbutton.setVisibility(View.GONE);  // or View.INVISIBLE
+        }
 
         // Find the EditText views and ImageButton views
         final EditText phoneNumber1EditText = findViewById(R.id.PhoneNumber1);
@@ -91,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         setCheckedRadioButton();
         MultiSim(this);
         updateMultiSimTxt();
-
 
         // Set OnClickListeners on the ImageButton views
         saveButton1.setOnClickListener(v -> saveSQLData(phoneNumber1EditText, 1));
@@ -177,14 +197,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         findViewById(R.id.button).setOnClickListener(view -> {
             Intent intent = new Intent("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING");
             intent.setClass(context, CallForwardingReceiver.class);
             intent.putExtra("cfi", PhoneStateService.currentState);
             context.sendBroadcast(intent);
         });
-
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -198,6 +216,27 @@ public class MainActivity extends AppCompatActivity {
             // saveSQLData(number,selectedId)
         });
 
+    }
+
+    private void addAutoStartup() {
+        try {
+            Intent intent = new Intent();
+            String manufacturer = android.os.Build.MANUFACTURER;
+            if ("xiaomi".equalsIgnoreCase(manufacturer)) {
+                intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+            } else if ("oppo".equalsIgnoreCase(manufacturer)) {
+                intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
+            } else if ("vivo".equalsIgnoreCase(manufacturer)) {
+                intent.setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"));
+            } else if ("Letv".equalsIgnoreCase(manufacturer)) {
+                intent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity"));
+            } else if ("Honor".equalsIgnoreCase(manufacturer)) {
+                intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
+            }
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e("exc", String.valueOf(e));
+        }
     }
 
     private void colorTextSaveStatus(EditText numberInput) {
@@ -217,10 +256,12 @@ public class MainActivity extends AppCompatActivity {
         if (subscriptionManager != null) {
             if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
+                assert subscriptionList != null;
                 if (DEBUG) Log.i(TAG, String.valueOf(subscriptionList.size()));
-                if (subscriptionList.size() <= 1) {
-                    findViewById(R.id.multisim_button).setVisibility(View.GONE);
-                } else findViewById(R.id.multisim_button).setOnClickListener(view -> showSimSelectionPopup(this));
+                if (subscriptionList.size() > 1) {
+                    findViewById(R.id.multisim_button).setVisibility(View.VISIBLE);
+                } else
+                    findViewById(R.id.multisim_button).setOnClickListener(view -> showSimSelectionPopup(this));
             }
         }
     }
@@ -311,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
             int color = ContextCompat.getColor(this, typedValue.resourceId);
             numberInput.setTextColor(color);
             if (isFirstEntry(database)) {
+                databaseHelper.changeSelected(String.valueOf(row));
                 if (Objects.equals(row, 1)) radioButton1.setChecked(true);
                 if (Objects.equals(row, 2)) radioButton2.setChecked(true);
                 if (Objects.equals(row, 3)) radioButton3.setChecked(true);
@@ -335,10 +377,10 @@ public class MainActivity extends AppCompatActivity {
         try (Cursor cursor = db.query("phone_numbers", columns, null, null, null, null, null)) {
             if (cursor.moveToFirst()) {
                 int count = cursor.getInt(0);
+                Log.i(TAG, String.valueOf(count));
                 return count == 1;
             }
         }
-
         return false; // Return false by default if an exception occurs or cursor is null
     }
 
@@ -371,11 +413,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Try Again");
                 // Request the permission
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE_READ_PHONE_STATE_PERMISSION);
-                return;
             }
-            // return;
-        }
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+        } else {
             //Permission already granted start service
             Intent serviceIntent = new Intent(context, PhoneStateService.class);
             context.startForegroundService(serviceIntent);
@@ -391,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted, you can do the required task
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, 2);
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
+                //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
                     // Show a dialog explaining the need for the permission
@@ -421,37 +460,11 @@ public class MainActivity extends AppCompatActivity {
                             .create()
                             .show();
                     return;
-                }/*
-                // Permission was denied, you can show a message to the user
-                new AlertDialog.Builder(this)
-                        .setTitle("Permission needed")
-                        .setMessage("This permission is needed to read the phone state and update the widget accordingly.")
-                        .setPositiveButton("Ok", (dialog, which) -> {
-                            // Redirect the user to the app's settings page
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", getPackageName(), null);
-                            intent.setData(uri);
-                            startActivity(intent);
-                        })
-                        //.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                        .create()
-                        .show();
-            }*/
+                }
             }
         }
         if (requestCode == 2) {
 
-            // Check if the permission was granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 4);
-                } else {
-                    Intent serviceIntent = new Intent(context, PhoneStateService.class);
-                    context.startForegroundService(serviceIntent);
-                }
-            }
-        }
-        if (requestCode == 4) {
             // Check if the permission was granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent serviceIntent = new Intent(context, PhoneStateService.class);
