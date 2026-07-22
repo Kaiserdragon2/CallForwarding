@@ -1,7 +1,6 @@
 package de.kaiserdragon.callforwardingstatus;
 
 import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE;
-import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -21,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import de.kaiserdragon.callforwardingstatus.helper.CallForwardingListener;
@@ -42,7 +40,6 @@ public class PhoneStateService extends Service {
     private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallForwardingIndicatorChanged(boolean cfi) {
-            if (DEBUG)Log.i(TAG, "onCallForwardingIndicatorChanged  CFI  Old=" + cfi);
             // Create an Intent with the android.appwidget.action.APPWIDGET_UPDATE action
             Intent intent = new Intent(appcontext, ForwardingStatusWidget.class);
             intent.setAction("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI");
@@ -113,11 +110,9 @@ public class PhoneStateService extends Service {
             if (callForwardingListener == null) { // Check if already registered
                 callForwardingListener = new CallForwardingListener(appcontext);
                 telephonyManager.registerTelephonyCallback(Executors. newSingleThreadExecutor(), callForwardingListener);
-                if (DEBUG) Log.i(TAG, "Registered TelephonyCallback");
             }
         } else {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR);
-            if (DEBUG) Log.i(TAG, "Registered PhoneStateListener");
         }
     }
 
@@ -129,7 +124,6 @@ public class PhoneStateService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&callForwardingListener != null) {
             telephonyManager.unregisterTelephonyCallback(callForwardingListener); // Unregister explicitly
             callForwardingListener = null;
-            if (DEBUG) Log.i(TAG, "Unregistered TelephonyCallback");
         } else {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }

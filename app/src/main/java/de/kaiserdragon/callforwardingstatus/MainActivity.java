@@ -1,7 +1,5 @@
 package de.kaiserdragon.callforwardingstatus;
 
-import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -257,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
             if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
                 assert subscriptionList != null;
-                if (DEBUG) Log.i(TAG, String.valueOf(subscriptionList.size()));
                 if (subscriptionList.size() > 1) {
                     findViewById(R.id.multisim_button).setVisibility(View.VISIBLE);
                 } else

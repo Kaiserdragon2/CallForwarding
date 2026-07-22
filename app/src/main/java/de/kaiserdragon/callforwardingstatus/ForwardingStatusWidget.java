@@ -1,7 +1,5 @@
 package de.kaiserdragon.callforwardingstatus;
 
-import static de.kaiserdragon.callforwardingstatus.BuildConfig.DEBUG;
-
 import android.Manifest;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -29,7 +27,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
         if ("de.kaiserdragon.callforwardingstatus.APPWIDGET_UPDATE_CFI".equals(intent.getAction())) {
             // Get the current CFI value from the Intent extra
             currentState = intent.getBooleanExtra("cfi", currentState);
-            if(DEBUG)Log.v(TAG,"CFI:"+currentState);
             PhoneStateService.currentState = currentState;
             // Update the widget with the current CFI value
             updateWidget(context, currentState);
@@ -39,7 +36,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
 
     public static void updateWidget(Context context, boolean cfi) {
         // Update the widget's views with the current CFI value
-        if(DEBUG)Log.v(TAG,"...updating");
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.forwarding_status_widget);
         if (cfi) views.setInt(R.id.ImageCallForwarding, "setColorFilter", Color.GREEN);
         else views.setInt(R.id.ImageCallForwarding, "setColorFilter", Color.RED);
@@ -67,7 +63,6 @@ public class ForwardingStatusWidget extends AppWidgetProvider {
             context.startActivity(intent);
             return;
         }
-        if (DEBUG) Log.v(TAG,"onUpdate got called");
         updateWidget(context, currentState);
     }
 
